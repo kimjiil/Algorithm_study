@@ -2,7 +2,7 @@
 
 ### 문제 설명
 
-![example](./assets/integer_triangle.png)
+![example](assets/integer_triangle.png)
 
 위와 같은 삼각형의 꼭대기에서 바닥까지 이어지는 경로 중,
 거쳐간 숫자의 합이 가장 큰 경우를 찾아보려고 합니다. 

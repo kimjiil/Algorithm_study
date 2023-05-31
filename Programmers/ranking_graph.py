@@ -2,31 +2,27 @@
 
 def solution(n, results):
     answer = 0
-    win_map = [[0 for i in range(n)] for j in range(n)]
-
-    log = dict()
-    for i in range(1, n + 1):
-        log[i] = [set([]), set([])] # 왼쪽 리스트는 n을 이긴 목록, 오른쪽 리스트는 n에게 진 목록
+    map = [[0 for i in range(n)] for j in range(n)]
 
     for win, lose in results:
-        log[win][1].add(lose)
-        log[lose][0].add(win)
-        win_map[lose - 1][win - 1] = 1
+        map[lose - 1][win - 1] = 1
+        map[win - 1][lose - 1] = -1
 
-    win_q = []
-    lose_q = []
-    for i in range(1, n + 1):
-        win_q = win_q + list(log[i][1])
-        lose_q = lose_q + list(log[i][0])
-        while len(win_q) > 0:
-            next_q = win_q.pop(0)
-            log[i][1] = log[i][1].union(log[next_q][1])
-            win_q = win_q + list(log[next_q][1])
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if map[i][k] == 1 and map[k][j] == 1:
+                    map[i][j] = 1
+                    map[j][i] = -1
 
-    for i in range(1, n + 1):
-        log_len = len(log[i][0]) + len(log[i][1]) + 1
-        if log_len == n:
+    for i in range(n):
+        a = sum([abs(m) for m in map[i]])
+        if a == (n - 1):
             answer += 1
+    return answer
+
+def solution1(n, results):
+    answer = 0
 
     return answer
 

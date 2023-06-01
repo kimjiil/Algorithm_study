@@ -1,5 +1,65 @@
+def move(*args):
+    x, y, board, prev_dir, cost, visited, dp = args[:]
+    visited.append((x, y))
+    n = len(board)
 
-import heapq
+    left = right = down = up = 214700000
+    if x == n - 1 and y == n - 1:
+        return cost
+
+    if x + 1 < n:
+        if not (x + 1, y) in visited and board[y][x + 1] == 0:
+            if prev_dir == 'u' or prev_dir == 'd':
+                t_cost = cost + 600
+            else:
+                t_cost = cost + 100
+            if t_cost < dp[y][x + 1]['r']:
+                dp[y][x + 1]['r'] = t_cost
+                right = move(x + 1, y, board, 'r', t_cost, visited[:], dp)
+
+    if y + 1 < n:
+        if not (x, y + 1) in visited and board[y + 1][x] == 0:
+            if prev_dir == 'l' or prev_dir == 'r':
+                t_cost = cost + 600
+            else:
+                t_cost = cost + 100
+            if t_cost < dp[y + 1][x]['d']:
+                dp[y + 1][x]['d'] = t_cost
+                down = move(x, y + 1, board, 'd', t_cost, visited[:], dp)
+
+    if x - 1 >= 0:
+        if not (x - 1, y) in visited and board[y][x - 1] == 0:
+            if prev_dir == 'u' or prev_dir == 'd':
+                t_cost = cost + 600
+            else:
+                t_cost = cost + 100
+            if t_cost < dp[y][x - 1]['l']:
+                dp[y][x - 1]['l'] = t_cost
+                left = move(x - 1, y, board, 'l', t_cost, visited[:], dp)
+
+    if y - 1 >= 0:
+        if not (x, y - 1) in visited and board[y - 1][x] == 0:
+            if prev_dir == 'l' or prev_dir == 'r':
+                t_cost = cost + 600
+            else:
+                t_cost = cost + 100
+            if t_cost < dp[y - 1][x]['u']:
+                dp[y - 1][x]['u'] = t_cost
+                up = move(x, y - 1, board, 'u', t_cost, visited[:], dp)
+
+    return min(up, right, down, left)
+
+from collections import defaultdict
+def solution(board):
+    x = y = 0
+    dp = [[dict(r=214700000, d=214700000, u=214700000, l=214700000) for i in range(len(board))] for i in range(len(board))]
+    visited = [(x, y)]
+    right = move(x, y, board, 'r', 0, visited[:], dp)
+    down = move(x, y, board, 'd', 0, visited[:], dp)
+
+    return min(dp[-1][-1].values())
+
+############################################################################################################################################
 
 def solution(board):
     N = len(board)
@@ -41,13 +101,13 @@ def solution(board):
 
     return min(visited[-1][-1])
 
-board = [[0,0,0],
-         [0,0,0],
-         [0,0,0]]
-result = 900
-answer = solution(board)
-print(answer)
-
+# board = [[0,0,0],
+#          [0,0,0],
+#          [0,0,0]]
+# result = 900
+# answer = solution(board)
+# print(answer)
+#
 board =[[0,0,0,0,0,0,0,1],
         [0,0,0,0,0,0,0,0],
         [0,0,0,0,0,1,0,0],
@@ -60,35 +120,35 @@ result =3800
 answer = solution(board)
 print(answer)
 
-board =[[0,0,1,0],
-        [0,0,0,0],
-        [0,1,0,1],
-        [1,0,0,0]]
-result =2100
-answer = solution(board)
-print(answer)
+# board =[[0,0,1,0],
+#         [0,0,0,0],
+#         [0,1,0,1],
+#         [1,0,0,0]]
+# result =2100
+# answer = solution(board)
+# print(answer)
 
-board =[[0,0,0,0,0,0],
-        [0,1,1,1,1,0],
-        [0,0,1,0,0,0],
-        [1,0,0,1,0,1],
-        [0,1,0,0,0,1],
-        [0,0,0,0,0,0]]
-result =3200
-answer = solution(board)
-print(answer)
-
-board = [
-[0, 0, 0, 0, 0],
-[0, 1, 1, 1, 0],
-[0, 0, 1, 0, 0],
-[1, 0, 0, 0, 1],
-[0, 1, 1, 0, 0]
-]
-result = 3000
-answer = solution(board)
-print(answer)
-
+# board =[[0,0,0,0,0,0],
+#         [0,1,1,1,1,0],
+#         [0,0,1,0,0,0],
+#         [1,0,0,1,0,1],
+#         [0,1,0,0,0,1],
+#         [0,0,0,0,0,0]]
+# result =3200
+# answer = solution(board)
+# print(answer)
+#
+# board = [
+# [0, 0, 0, 0, 0],
+# [0, 1, 1, 1, 0],
+# [0, 0, 1, 0, 0],
+# [1, 0, 0, 0, 1],
+# [0, 1, 1, 0, 0]
+# ]
+# result = 3000
+# answer = solution(board)
+# print(answer)
+#
 board = [[0, 0, 1, 0, 1, 1, 0, 0, 0, 0],
          [0, 0, 0, 0, 1, 0, 1, 1, 0, 1],
          [1, 0, 0, 0, 0, 1, 1, 0, 1, 0],
@@ -103,11 +163,23 @@ board = [[0, 0, 1, 0, 1, 1, 0, 0, 0, 0],
 
 answer = solution(board)
 print(answer)
-
+#
 
 board = [[0, 0, 1],
          [0, 0, 0],
          [1, 0, 0]]
+
+answer = solution(board)
+print(answer)
+
+board = [[0, 0, 0, 0, 0, 0, 0, 0],
+         [1, 0, 1, 1, 1, 1, 1, 0],
+         [1, 0, 0, 1, 0, 0, 0, 0],
+         [1, 1, 0, 0, 0, 1, 1, 1],
+         [1, 1, 1, 1, 0, 0, 0, 0],
+         [1, 1, 1, 1, 1, 1, 1, 0],
+         [1, 1, 1, 1, 1, 1, 1, 0],
+         [1, 1, 1, 1, 1, 1, 1, 0]]
 
 answer = solution(board)
 print(answer)

@@ -217,6 +217,7 @@ def solution(play_time, adv_time, logs):
     start_adv_i = 0
     for i in range(1, get_index(play_time) - get_index(adv_time) + 1):
         dp[i] = dp[i - 1] + time_maps[i + get_index(adv_time) - 1] - time_maps[i - 1]
+        # 이부분에서 time_map index랑 dp index랑 헷갈렷음
         if dp[i] > dp_max:
             dp_max = dp[i]
             start_adv_i = i

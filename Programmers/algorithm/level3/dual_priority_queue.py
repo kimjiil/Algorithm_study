@@ -97,3 +97,60 @@ print(result)
 
 i의 자식은  2i + 1 / 2i + 2 
 '''
+
+
+# 2023-06-27 다시 품
+import heapq
+
+class dual_queue:
+    def __init__(self):
+        self.max_heap = []
+        self.min_heap = []
+        self.length = 0
+
+    def __len__(self):
+        return self.length
+
+    def insert(self, element):
+        heapq.heappush(self.max_heap, -element)
+        heapq.heappush(self.min_heap, element)
+        self.length += 1
+
+    def delete(self, type):
+        if self.length > 0:
+            if type == 1: # 최대값 삭제
+                heapq.heappop(self.max_heap)
+                self.length -= 1
+
+            elif type == -1: # 최소값 삭제
+                heapq.heappop(self.min_heap)
+                self.length -= 1
+
+
+        if len(self.max_heap) == 0:
+            self.min_heap = []
+        if len(self.min_heap) == 0:
+            self.max_heap = []
+        if self.length == 0:
+            self.max_heap = []
+            self.min_heap = []
+
+    def GetMinMax(self):
+        if self.length > 0:
+            return [-self.max_heap[0], self.min_heap[0]]
+        else:
+            return [0, 0]
+
+def solution(operations):
+    answer = []
+
+    dq = dual_queue()
+    for operation in operations:
+        op, num = operation.split(' ')
+        num = int(num)
+        if op == 'I':
+            dq.insert(num)
+        elif op == 'D':
+            dq.delete(num)
+
+    return dq.GetMinMax()

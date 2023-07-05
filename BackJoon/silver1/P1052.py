@@ -1,33 +1,30 @@
 # 물병
 # 이진법으로 변환했을떄 1의 개수가 k보다 작을 경우
 
-
 import sys
 input = sys.stdin.readline
 
 # n, k = map(int, input().split())
 
-n = 888
-k = 2
-min_rest = 10 ** 7
+n = int('0b101010101011001000010000', 2)
+# n = 3
+k = 7
+bin_n = bin(n)[2:]
+#보다 큰                     '11110000000000000000'
 
-if k <= n:
-    N = [1]
-    for i in range(k):
-        while sum(N) <= n:
-            N[i] *= 2
-        N[i] /= 2
+if bin_n.count('1') > k:
+    i = 0
+    n_k = 0
+    while n_k < k:
+        if bin_n[i] == '1':
+            n_k += 1
+        i += 1
 
-    rest = n - sum(N)
-
-    if rest == 0:
-        print(0)
-    else:
-        answer = int(min(N) - rest)
-        print(answer)
+    answer = int('0b' + bin_n[:i] + '0' * (len(bin_n) - i), 2) + int('0b' + '1' + '0' *(len(bin_n) - i), 2)
+    answer = answer - n
+    print(answer)
 else:
-    print(-1)
-
+    print(0)
 
 
 

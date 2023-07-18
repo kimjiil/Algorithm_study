@@ -1,33 +1,29 @@
+import sys
+from bisect import bisect_left
 
-a = [0, 3, 5, 7, 9]
+input = sys.stdin.readline
 
-def bs(a, b):
-    left = 0
-    right = len(a) - 1
-    mid = int((left + right) / 2)
-    while left < right:
-        print(left, mid, right)
+n = int(input())
 
-        if a[mid] < b:
-            left = mid + 1
-        else:
-            right = mid
-        mid = int((left + right) / 2)
-    return mid
+seq = list(map(int, input().split()))
+a_list = []
+dp_list = []
+for a in seq:
+    if not a_list or a_list[-1] < a:
+        a_list.append(a)
+        dp_list.append(len(a_list) - 1)
+    else:
+        idx = bisect_left(a_list, a)
+        a_list[idx] = a
+        dp_list.append(idx)
 
-A = [3, 5, 7, 9, 2, 1, 4, 8]
+answer = len(a_list)
+print(answer)
 
-def solution(A):
-    dp = [0]
-    b = [0]
-    for i, a in enumerate(A):
-        if b[-1] < a:
-            b.append(a)
-            dp.append(dp[-1] + 1)
-        else:
-            idx = bs(b, a)
-            b[idx] = a
+str_list = []
+for i in range(len(dp_list) - 1, -1, -1):
+    if dp_list[i] == answer - 1:
+        str_list.append(seq[i])
+        answer -= 1
 
-    return dp[-1]
-
-solution(A)
+print(' '.join(map(str, str_list[::-1])))

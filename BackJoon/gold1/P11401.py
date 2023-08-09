@@ -39,6 +39,8 @@ def solution():
         b = (b * (i + 1)) % r
         # b = modinverse((i + 1), r)
         # out = (a * b) % r
+
+    temp = modinverse(b, r)
     out = (a * modinverse(b, r) % r)
     return out
 

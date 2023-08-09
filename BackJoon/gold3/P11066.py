@@ -4,31 +4,44 @@ import sys
 
 input = sys.stdin.readline
 
+# 집합의 최소 비용을 계산함
+def recur(files):
 
-def recur(a):
-    if len(a) == 2:
-        return [sum(a)], sum(a)
-    if len(a) <= 1:
-        return a, 0 # 합친 원소, 든 비용
+    if len(files) == 2:
+        return sum(files)
 
-    # case1
-    l1, c1 = recur(a[:2])
-    l2, c2 = recur(a[2:])
+    if len(files) == 1:
+        return 0
 
-    total_cost = c1 + c2 + sum(l1, l2)
-    result_list = l1 + l2
+    t = []
+    for k in range(1, len(files)):
+        # len 5 0 1 2 3 4
+        left = recur(files[:k]) + sum(files[:k])
+        right = recur(files[k:]) + sum(files[k:])
+        t.append(left + right)
 
-    # case2
-    l1, c1 = recur(a[1:3])
-    l2, c2 = recur(a[3:])
+    return min(t)
 
-    total_cost = a[0] + c1 + c2 + sum(l1, l2)
+def dp(files):
 
-    b = recur(a[:2]) + recur(a[2:])
-    c = [a[0]] + recur(a[1:3]) + recur(a[3:])
-    if sum
+    #dp[i][j] i부터 j번쨰 파일의 부분집합의 최소 비용
+    dp = [[214700000 if i != j else 0 for j in range(len(files))] for i in range(len(files))]
+    sum_list = []
+    s = 0
+    sum_list.append(s)
+    for i in files:
+        s += i
+        sum_list.append(s)
 
-    print()
+    for i in range(0, len(files)): # 간격
+        for j in range(0, len(files) - i):
+            for k in range(j, j + i):
+                if i == 1:
+                    dp[j][j + i] = sum_list[j + i + 1] - sum_list[j]
+                else:
+                    dp[j][j + i] = min(dp[j][j + i], dp[j][k] + dp[k+1][j+i] + sum_list[j + i + 1] - sum_list[j])#sum(files[j:j + i + 1]))
+
+    return dp[0][-1]
 
 def solution():
     T = int(input())
@@ -37,6 +50,7 @@ def solution():
         file_n = int(input())
         files = list(map(int, input().replace("\n", '').split()))
 
-        print(recur(files))
+        # print(recur(files))
+        print(dp(files))
 
 solution()

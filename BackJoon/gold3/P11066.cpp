@@ -47,7 +47,46 @@ int recur_met(int* files, int* accum, int start_idx, int end_idx) {
 	return cost;
 }
 
+int dp_met_knuth(int* files, int* accum, int n_file) {
+    // A[i][j - 1] <= A[i][j] <= A[i+1][j]
+	int** dp = new int* [n_file];
+	int** A = new int* [n_file];
+	for (int i = 0; i < n_file; i++) {
+		dp[i] = new int[n_file];
+		A[i] = new int[n_file];
+		for (int j = 0; j < n_file; j++) {
+			dp[i][j] = INT32_MAX;
+			if (i == j) {
+				A[i][j] = i;
+			}
+			else {
+				A[i][j] = 0;
+			}
+		}
+	}
 
+
+	for (int k = 0; k <= n_file; k++) { // 길이
+		for (int i = 0; i < n_file - k; i++) { // 시작 지점
+			if (k == 0) {
+				dp[i][i + k] = 0;
+			}
+			else {
+				for (int j = A[i][i + k - 1]; j < min(A[i + 1][i + k] + 1, i+ k); j++) { // split 지점
+					int tmp = dp[i][j] + dp[j + 1][i + k] + accum[i + k + 1] - accum[i];
+					//dp[i][i+k] = min(dp[i][i+k], tmp);
+					if (dp[i][i + k] > tmp) {
+						dp[i][i + k] = tmp;
+						A[i][i + k] = j;
+					}
+					//cout << i << " " << j << " " << k + i << " " << dp[i][j] + dp[j + 1][i + k] + accum[i + k + 1] - accum[i] << "\n";
+				}
+			}
+		}
+		//print_dp(dp, A, n_file);
+	}
+
+	return dp[0][n_file - 1];
 
 int dp_met(int* files, int* accum, int n_file) {
 

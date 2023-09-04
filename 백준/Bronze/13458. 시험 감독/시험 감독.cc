@@ -15,10 +15,9 @@ int main() {
 	}
 
 	cin >> B >> C;
-	ull com = 0;
+	ull com = N;
 	for (int i = 0; i < N; i++) {
 		//A[i] = A[i] - B;
-		com++;
 		if (A[i] - B > 0) {
 			com += ((A[i] - B) / C);
 			if ((A[i] - B) % C > 0) {
